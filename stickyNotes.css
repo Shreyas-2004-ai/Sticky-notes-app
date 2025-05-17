@@ -1,0 +1,152 @@
+
+:root {
+    /* Calm Theme */
+    --calm-primary: #7eb8da;
+    --calm-secondary: #a8d5ba;
+    --calm-accent: #93c5fd;
+    --calm-background: #f8fafc;
+    --calm-text: #334155;
+
+    /* Energetic Theme */
+    --energetic-primary: #f97316;
+    --energetic-secondary: #fbbf24;
+    --energetic-accent: #fb923c;
+    --energetic-background: #fff7ed;
+    --energetic-text: #431407;
+
+    /* Focus Theme */
+    --focus-primary: #7c3aed;
+    --focus-secondary: #6366f1;
+    --focus-accent: #a78bfa;
+    --focus-background: #f5f3ff;
+    --focus-text: #2e1065;
+
+    /* Creative Theme */
+    --creative-primary: #ec4899;
+    --creative-secondary: #06b6d4;
+    --creative-accent: #f472b6;
+    --creative-background: #fdf2f8;
+    --creative-text: #831843;
+
+    /* Common Variables */
+    --note-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --note-hover-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    
+    /* Light Theme Default Colors */
+    --header-bg: rgba(255, 255, 255, 0.9);
+    --controls-bg: rgba(255, 255, 255, 0.8);
+    --note-bg: white;
+    --border-color: rgba(0, 0, 0, 0.1);
+}
+
+
+[data-theme="dark"] {
+    --calm-background: #1a1a2e;
+    --energetic-background: #1a1a2e;
+    --focus-background: #1a1a2e;
+    --creative-background: #1a1a2e;
+    
+    --calm-text: #e2e8f0;
+    --energetic-text: #e2e8f0;
+    --focus-text: #e2e8f0;
+    --creative-text: #e2e8f0;
+    
+    --header-bg: rgba(26, 26, 46, 0.9);
+    --controls-bg: rgba(26, 26, 46, 0.8);
+    --note-bg: #242442;
+    --border-color: rgba(255, 255, 255, 0.1);
+    
+    --note-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+    --note-hover-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--background);
+    color: var(--text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    cursor: none;
+}
+
+.custom-cursor {
+    width: 12px;
+    height: 12px;
+    background: var(--primary);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: width 0.2s, height 0.2s, background-color 0.2s;
+    will-change: transform;
+    box-shadow: 0 0 10px var(--primary);
+}
+
+.custom-cursor.hover {
+    width: 20px;
+    height: 20px;
+    background: var(--accent) !important;
+}
+
+.custom-cursor.active {
+    width: 10px;
+    height: 10px;
+    background: var(--secondary) !important;
+}
+
+header {
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--header-bg);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--border-color);
+}
+
+h1 {
+  font-size: 2.5rem;
+  background: linear-gradient(45deg, var(--calm-primary), var(--calm-secondary));
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+.controls {
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--controls-bg);
+    backdrop-filter: blur(5px);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+}
+
+.left-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.right-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.view-controls {
+    display: flex;
+    gap: 8px;
+    margin-right: 8px;
+}
+
