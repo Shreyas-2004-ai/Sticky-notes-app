@@ -1,80 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Note Nest - Smart Sticky Notes</title>
-    <link rel="stylesheet" href="./CSS/stickyNotes.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body class="theme-calm">
+    <link rel="stylesheet" href="./CSS/stickyNotes.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body class="theme-calm">
     <div class="custom-cursor"></div>
-    
+
     <header>
-        <h1>NoteNest</h1>
-        <div class="header-controls">
-            <button id="dark-mode-toggle" class="theme-toggle">
-                <i class="fas fa-moon"></i>
-            </button>
-            <div class="theme-switcher">
-                <button data-theme="calm" class="active"><i class="fas fa-moon"></i> Calm</button>
-                <button data-theme="energetic"><i class="fas fa-sun"></i> Energetic</button>
-                <button data-theme="focus"><i class="fas fa-bullseye"></i> Focus</button>
-                <button data-theme="creative"><i class="fas fa-palette"></i> Creative</button>
-            </div>
+      <h1>NoteNest</h1>
+      <div class="header-controls">
+        <button id="dark-mode-toggle" class="theme-toggle">
+          <i class="fas fa-moon"></i>
+        </button>
+        <div class="theme-switcher">
+          <button data-theme="calm" class="active">
+            <i class="fas fa-moon"></i> Calm
+          </button>
+          <button data-theme="energetic">
+            <i class="fas fa-sun"></i> Energetic
+          </button>
+          <button data-theme="focus">
+            <i class="fas fa-bullseye"></i> Focus
+          </button>
+          <button data-theme="creative">
+            <i class="fas fa-palette"></i> Creative
+          </button>
         </div>
+      </div>
     </header>
 
     <main>
-        <div class="controls">
-            <div class="left-controls">
-                <button id="add-note" class="btn-primary">
-                    <i class="fas fa-plus"></i> Add Note
-                </button>
-            </div>
-            <div class="right-controls">
-                <div class="view-controls">
-                    <button id="grid-view" class="active">
-                        <i class="fas fa-th"></i>
-                    </button>
-                    <button id="timeline-view">
-                        <i class="fas fa-stream"></i>
-                    </button>
-                </div>
-                <button id="delete-all" class="btn-danger">
-                    <i class="fas fa-trash-alt"></i> Delete All
-                </button>
-            </div>
+      <div class="controls">
+        <div class="left-controls">
+          <button id="add-note" class="btn-primary">
+            <i class="fas fa-plus"></i> Add Note
+          </button>
         </div>
+        <div class="right-controls">
+          <div class="view-controls">
+            <button id="grid-view" class="active">
+              <i class="fas fa-th"></i>
+            </button>
+            <button id="timeline-view">
+              <i class="fas fa-stream"></i>
+            </button>
+          </div>
+          <button id="delete-all" class="btn-danger">
+            <i class="fas fa-trash-alt"></i> Delete All
+          </button>
+        </div>
+      </div>
 
-        <div class="tags-container">
-            <div class="tags-list"></div>
-        </div>
+      <div class="tags-container">
+        <div class="tags-list"></div>
+      </div>
 
-        <div class="notes-wrapper">
-            <div id="calm-notes" class="notes-container grid-view" data-theme="calm"></div>
-            <div id="energetic-notes" class="notes-container grid-view" data-theme="energetic"></div>
-            <div id="focus-notes" class="notes-container grid-view" data-theme="focus"></div>
-            <div id="creative-notes" class="notes-container grid-view" data-theme="creative"></div>
-        </div>
+      <div class="notes-wrapper">
+        <div
+          id="calm-notes"
+          class="notes-container grid-view"
+          data-theme="calm"
+        ></div>
+        <div
+          id="energetic-notes"
+          class="notes-container grid-view"
+          data-theme="energetic"
+        ></div>
+        <div
+          id="focus-notes"
+          class="notes-container grid-view"
+          data-theme="focus"
+        ></div>
+        <div
+          id="creative-notes"
+          class="notes-container grid-view"
+          data-theme="creative"
+        ></div>
+      </div>
     </main>
 
     <!-- Note Template -->
     <template id="note-template">
-        <div class="note">
-            <div class="note-header">
-                <input type="text" class="tag-input" placeholder="Add tags...">
-                <div class="note-actions">
-                    <button class="btn-icon delete"><i class="fas fa-trash"></i></button>
-                </div>
-            </div>
-            <div class="note-content" contenteditable="true" placeholder="Type your note here..."></div>
-            <div class="note-tags"></div>
-            <div class="timestamp"></div>
-            <div class="note-resize-handle"></div>
+      <div class="note">
+        <div class="note-header">
+          <input type="text" class="tag-input" placeholder="Add tags..." />
+          <div class="note-actions">
+            <button class="btn-icon delete">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
         </div>
+        <div
+          class="note-content"
+          contenteditable="true"
+          placeholder="Type your note here..."
+        ></div>
+        <div class="timestamp"></div>
+        <div class="note-resize-handle"></div>
+      </div>
     </template>
 
     <script src="./JS/stickyNotes.js"></script>
-</body>
-</html> 
+  </body>
+</html>
