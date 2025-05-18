@@ -2,7 +2,7 @@
 const darkModeToggle = document.getElementById('dark-mode-toggle');
 const htmlElement = document.documentElement;
 
-
+// theme
 const savedTheme = localStorage.getItem('dark-theme');
 if (savedTheme === 'true') {
     htmlElement.setAttribute('data-theme', 'dark');
@@ -32,7 +32,7 @@ document.addEventListener('mousemove', (e) => {
     cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
 });
 
-
+// Theme Switching cursor color
 const themeSwitchers = document.querySelectorAll('.theme-switcher button');
 themeSwitchers.forEach(button => {
     button.addEventListener('click', () => {
@@ -41,10 +41,14 @@ themeSwitchers.forEach(button => {
         themeSwitchers.forEach(btn => btn.classList.remove('active'));
         button.classList.add('active');
         
+        // Update cursor color on theme
         const computedStyle = getComputedStyle(button);
         const buttonColor = computedStyle.backgroundColor;
         cursor.style.background = buttonColor;
         cursor.style.boxShadow = `0 0 10px ${buttonColor}`;
+
+        // Save current theme (when its reload)
+        localStorage.setItem('current-theme', theme);
     });
 });
 
@@ -64,7 +68,7 @@ document.addEventListener('mouseout', (e) => {
     const target = e.target;
     if (target.matches('button, .note-content, .tag-input, .btn-icon, .note-resize-handle')) {
         cursor.classList.remove('hover');
-        
+        // Restore theme color
         const currentTheme = document.body.className.replace('theme-', '');
         const themeButton = document.querySelector(`.theme-switcher button[data-theme="${currentTheme}"]`);
         const computedStyle = getComputedStyle(themeButton);
@@ -72,7 +76,7 @@ document.addEventListener('mouseout', (e) => {
     }
 });
 
-// Mouse click 
+// Mouse click animation
 document.addEventListener('mousedown', () => {
     cursor.classList.add('active');
 });
@@ -81,10 +85,10 @@ document.addEventListener('mouseup', () => {
     cursor.classList.remove('active');
 });
 
-// Note Management
+// Note 
 class Note {
-    constructor(content = '', theme = 'calm') {
-        
+    constructor(content = '', theme = 'calm', shouldSave = true) {
+        // Ensure we have valid parameters
         if (typeof content !== 'string' || !['calm', 'energetic', 'focus', 'creative'].includes(theme)) {
             console.error('Invalid note parameters');
             return;
@@ -104,7 +108,9 @@ class Note {
         }
 
         
-        this.save();
+        if (shouldSave) {
+            this.save();
+        }
     }
 
     createNoteElement() {
@@ -117,24 +123,24 @@ class Note {
         const element = template.content.firstElementChild.cloneNode(true);
         element.id = `note-${this.id}`;
 
-        
+        // Set up content
         const contentDiv = element.querySelector('.note-content');
         if (contentDiv) {
             contentDiv.textContent = this.content;
         }
 
-       
+        // Set up timestamp
         const timestamp = element.querySelector('.timestamp');
         if (timestamp) {
             timestamp.textContent = this.formatTimestamp();
         }
 
-        
-        this.element = element; // Temporarily set element for event listener setup
+
+        this.element = element; 
         this.setupEventListeners();
         this.setupDragging();
         this.setupResizing();
-        this.element = null; // Reset it so we can return the proper value
+        this.element = null; 
 
         return element;
     }
@@ -189,7 +195,7 @@ class Note {
             const originalScrollX = window.scrollX;
             const originalScrollY = window.scrollY;
             
-           
+            // draging
             this.element.style.position = 'absolute';
             this.element.style.zIndex = '1000';
             this.isDragging = true;
@@ -202,9 +208,9 @@ class Note {
                 const scrollDiffX = window.scrollX - originalScrollX;
                 const scrollDiffY = window.scrollY - originalScrollY;
                 
-                
-                const offsetX = this.element.offsetWidth / 4;  // Reduced from half to quarter
-                const offsetY = this.element.offsetHeight / 4; // Reduced from half to quarter
+               
+                const offsetX = this.element.offsetWidth / 4; 
+                const offsetY = this.element.offsetHeight / 4; 
                 
                 this.element.style.left = `${e.clientX - offsetX + scrollDiffX}px`;
                 this.element.style.top = `${e.clientY - offsetY + scrollDiffY}px`;
@@ -216,7 +222,7 @@ class Note {
                 this.isDragging = false;
                 this.element.classList.remove('dragging');
                 
-                // Get the current container and important measurements
+                
                 const currentTheme = document.body.className.replace('theme-', '') || 'calm';
                 const container = document.querySelector(`#${currentTheme}-notes`);
                 
@@ -281,7 +287,6 @@ class Note {
                         }
                         
                         if (!found) {
-                           
                             nearestX = initialX;
                             nearestY = initialY;
                         }
@@ -300,7 +305,7 @@ class Note {
                 document.removeEventListener('mousemove', mouseMoveHandler);
                 document.removeEventListener('mouseup', mouseUpHandler);
                 
-                // Save the new position
+                
                 this.save();
             };
             
@@ -413,12 +418,11 @@ class Note {
     }
 }
 
-// Clear all notes 
+
 function clearAllNotes() {
-    // Clear localStorage
+   
     localStorage.removeItem('notes');
     
-
     document.querySelectorAll('.notes-container').forEach(container => {
         container.innerHTML = '';
     });
@@ -431,39 +435,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const gridViewBtn = document.getElementById('grid-view');
     const timelineViewBtn = document.getElementById('timeline-view');
 
-    // Clear all notes on first load
-    localStorage.clear();
+    // Restore the saved theme
+    const savedTheme = localStorage.getItem('current-theme') || 'calm';
+    document.body.className = `theme-${savedTheme}`;
+    const savedThemeButton = document.querySelector(`.theme-switcher button[data-theme="${savedTheme}"]`);
+    if (savedThemeButton) {
+        themeSwitchers.forEach(btn => btn.classList.remove('active'));
+        savedThemeButton.classList.add('active');
+        
+        // Update cursor color
+        const computedStyle = getComputedStyle(savedThemeButton);
+        const buttonColor = computedStyle.backgroundColor;
+        cursor.style.background = buttonColor;
+        cursor.style.boxShadow = `0 0 10px ${buttonColor}`;
+    }
 
-    
+    // Clear all containers before loading notes
     document.querySelectorAll('.notes-container').forEach(container => {
         container.innerHTML = '';
     });
 
-    
-    deleteAllBtn.addEventListener('click', () => {
-        const currentTheme = document.body.className.replace('theme-', '') || 'calm';
-        const container = document.querySelector(`#${currentTheme}-notes`);
-        
-        if (container) {
-           
-            const notes = container.querySelectorAll('.note');
-            notes.forEach(note => {
-                note.style.animation = 'noteDisappear 0.3s ease-out forwards';
-            });
-
-            // Remove notes after animation
-            setTimeout(() => {
-                container.innerHTML = '';
-                
-                
-                const savedNotes = JSON.parse(localStorage.getItem('notes') || '[]');
-                const updatedNotes = savedNotes.filter(note => note.theme !== currentTheme);
-                localStorage.setItem('notes', JSON.stringify(updatedNotes));
-            }, 300);
-        }
-    });
-
-    
+    // Load saved notes from localStorage
     const savedNotes = JSON.parse(localStorage.getItem('notes') || '[]');
     if (Array.isArray(savedNotes)) {
         savedNotes.forEach(noteData => {
@@ -473,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ['calm', 'energetic', 'focus', 'creative'].includes(noteData.theme) &&
                 typeof noteData.content === 'string') {
                 
-                const note = new Note(noteData.content, noteData.theme);
+                const note = new Note(noteData.content, noteData.theme, false);  // Don't save when loading
                 note.id = noteData.id;
                 note.timestamp = new Date(noteData.timestamp);
                 
@@ -481,21 +473,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     noteData.tags.forEach(tag => note.addTag(tag));
                 }
                 
-                
                 if (noteData.position) {
                     note.element.style.position = 'absolute';
                     note.element.style.left = noteData.position.left || '0px';
                     note.element.style.top = noteData.position.top || '0px';
                 }
                 
-                
                 const container = document.querySelector(`#${noteData.theme}-notes`);
                 if (container) {
                     container.appendChild(note.element);
                 }
             }
-        });
+        });         
     }
+
+    // Delete all notes 
+    deleteAllBtn.addEventListener('click', () => {
+        const currentTheme = document.body.className.replace('theme-', '') || 'calm';
+        const container = document.querySelector(`#${currentTheme}-notes`);
+        
+        if (container) {
+            
+            const notes = container.querySelectorAll('.note');
+            notes.forEach(note => {
+                note.style.animation = 'noteDisappear 0.3s ease-out forwards';
+            });
+
+            setTimeout(() => {
+                container.innerHTML = '';
+                
+                const savedNotes = JSON.parse(localStorage.getItem('notes') || '[]');
+                const updatedNotes = savedNotes.filter(note => note.theme !== currentTheme);
+                localStorage.setItem('notes', JSON.stringify(updatedNotes));
+            }, 300);
+        }
+    });
 
     // Add New Note
     addNoteBtn.addEventListener('click', () => {
@@ -507,7 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const note = new Note('', currentTheme);
+        const note = new Note('', currentTheme, true);  // Save new notes created by user
         if (!note.element) {
             console.error('Failed to create new note');
             return;
@@ -515,17 +527,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         container.appendChild(note.element);
 
-        // Find empty space for the new note
+        
         const noteWidth = 300; 
         const noteHeight = 200; 
         const padding = 32; 
         const headerHeight = document.querySelector('header').getBoundingClientRect().height;
         const controlsHeight = document.querySelector('.controls').getBoundingClientRect().height;
 
-        // Get all existing notes in the container
+        
         const existingNotes = Array.from(container.querySelectorAll('.note')).filter(n => n !== note.element);
         
-        // Function to check if a position is occupied
+       
         const isPositionOccupied = (x, y) => {
             return existingNotes.some(existingNote => {
                 const rect = existingNote.getBoundingClientRect();
@@ -536,7 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        // Function to check if position is within container bounds
+        
         const isWithinBounds = (x, y) => {
             const containerRect = container.getBoundingClientRect();
             return x >= containerRect.left &&
@@ -545,7 +557,7 @@ document.addEventListener('DOMContentLoaded', () => {
                    y + noteHeight <= containerRect.bottom;
         };
 
-        // Find the first empty position
+        
         let foundPosition = false;
         let posX = container.getBoundingClientRect().left + padding;
         let posY = headerHeight + controlsHeight + padding;
@@ -554,7 +566,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.innerHeight - headerHeight - controlsHeight
         );
 
-        // Grid-based positioning
+        
         const gridX = noteWidth + padding;
         const gridY = noteHeight + padding;
 
@@ -570,7 +582,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // If no empty space found, place at the bottom
+        
         if (!foundPosition) {
             const lastNote = existingNotes[existingNotes.length - 1];
             const y = lastNote ? 
@@ -582,7 +594,7 @@ document.addEventListener('DOMContentLoaded', () => {
             note.element.style.top = `${y}px`;
         }
         
-        // Focus the content area
+        
         const contentDiv = note.element.querySelector('.note-content');
         if (contentDiv) {
             contentDiv.focus();
@@ -592,7 +604,7 @@ document.addEventListener('DOMContentLoaded', () => {
         note.save();
     });
 
-    // View Switching
+    
     gridViewBtn.addEventListener('click', () => {
         document.querySelectorAll('.notes-container').forEach(container => {
             container.classList.remove('timeline-view');
